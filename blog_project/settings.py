@@ -165,7 +165,25 @@ DJOSER = {
 # Configure Spectacular settings
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Blog API',
-    'DESCRIPTION': 'A simple blog API with user profiles.',
+    'DESCRIPTION': (
+        'Core API endpoints for a blogging platform.\n\n'
+        'Sections:\n'
+        '- Profiles: manage user public profile data (view, update own).\n'
+        '- Categories & Tags: taxonomy to classify posts (read-only for now).\n'
+        '- Posts: create, list, filter, search, like, and comment on blog posts.\n'
+        '- Comments: CRUD on individual comments plus like toggling.\n\n'
+        'Authentication & user management are provided separately via Djoser/JWT endpoints.'
+    ),
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+    # Group endpoints via tags (used automatically from ViewSet names or overridden here)
+    'TAGS': [
+        {'name': 'Auth', 'description': 'Authentication & user management (JWT, registration, login).'},
+        {'name': 'Profiles', 'description': 'List, retrieve, and modify user profile data.'},
+        {'name': 'Categories', 'description': 'Content categories (read-only).'},
+        {'name': 'Tags', 'description': 'Content tags (read-only).'},
+        {'name': 'Posts', 'description': 'Create, list, filter, search, like, and comment on posts.'},
+        {'name': 'Comments', 'description': 'CRUD and like operations for comments.'},
+    ],
+    'POSTPROCESSING_HOOKS': ['blog_project.spectacular_hooks.custom_postprocessing_hook'],
 }

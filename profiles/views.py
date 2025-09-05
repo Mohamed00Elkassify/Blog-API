@@ -1,10 +1,11 @@
-from rest_framework import generics, permissions, viewsets
+from rest_framework import generics, permissions, viewsets, status
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from .models import Profile
 from .serializers import ProfileSerializer, UserSerializer
 from .permissions import IsOwnerOrReadOnly
+from drf_spectacular.utils import extend_schema, extend_schema_view
 
 # Create your views here.
 # class ProfileListView(generics.ListAPIView):
@@ -31,10 +32,25 @@ from .permissions import IsOwnerOrReadOnly
 #         return get_object_or_404(Profile, user=user)
 
 #! Using ViewSet for better organization
+@extend_schema_view(
+    list=extend_schema(
+        tags=['Profiles'],
+        summary='List profiles',
+        description='Return a list of all user profiles. Requires authentication.'
+    ),
+    retrieve=extend_schema(
+        tags=['Profiles'],
+        summary='Retrieve a profile',
+        description='Retrieve a single user profile by username.'
+    ),
+    update=extend_schema(
+        tags=['Profiles'],
+        summary='Update a profile (PUT/PATCH)',
+        description='Update the authenticated user\'s profile. Supports both full (PUT) and partial (PATCH) updates. Only the owner can modify.'
+    )
+)
 class ProfileViewSet(viewsets.ViewSet):
-    """
-    A ViewSet for listing, retrieving, and updating user profiles.
-    """
+    """Profiles endpoints (tag: Profiles)."""
     lookup_field = 'username'
     def get_permissions(self):
         if self.action in ['list', 'retrieve']:
