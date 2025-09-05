@@ -61,14 +61,14 @@ class PostSerializer(serializers.ModelSerializer):
             instance.tags.set(tags_data)
         return instance
     
-class CommnetSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     author_username = serializers.CharField(source='author.username', read_only=True)
     likes_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
         fields = ['id', 'post', 'author', 'author_username', 'content', 'created_at', 'updated_at', 'likes_count']
-        read_only_fields = ['id', 'author', 'author_username', 'created_at', 'updated_at', 'likes_count']
+        read_only_fields = ['id', 'post', 'author', 'author_username', 'created_at', 'updated_at', 'likes_count']
 
     def get_likes_count(self, obj):
         return obj.likes_count
