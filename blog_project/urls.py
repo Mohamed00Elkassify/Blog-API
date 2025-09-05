@@ -32,6 +32,7 @@ urlpatterns = [
 
     # API apps
     path('api/profiles/', include('profiles.urls')),
+    path('api/blog/', include('blog.urls')),
 
 ]
 
